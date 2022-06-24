@@ -21,6 +21,15 @@ DRF를 공부하고 만든 첫 프로젝트이며 혼자서 모든것을 담당�
   - **✔**API 관리 툴 : postman
 
   - **✔**개발툴: PyCharm
+  
+<br>
+
+### 📎 브랜치 구조
+  - main  
+    - feature
+      - user
+      - product
+      - order
 
 <br>
 
