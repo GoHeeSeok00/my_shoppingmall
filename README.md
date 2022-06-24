@@ -54,15 +54,15 @@ DRF를 공부하고 만든 첫 프로젝트이며 혼자서 모든것을 담당�
 
 ### 📎 모델 설계 (ERD)
   - 사용 서비스 : ERDCloud
-![ERD](https://user-images.githubusercontent.com/96563183/175491843-8208cebf-d26c-44ea-b0bc-d9288472318e.png)
-
+![ERD 1차 수정](https://user-images.githubusercontent.com/96563183/175559947-54e6b6d5-ed77-42ae-bcb7-ecf8201a848f.png)
 
 <br>
 
 ### 📎 테이블 명세서
-![SA 테이블 명세서](https://user-images.githubusercontent.com/96563183/175493018-9b8b064a-c1d4-4812-9049-d59c90f435e0.png)
+![SA 테이블 명세서3](https://user-images.githubusercontent.com/96563183/175560025-695c541d-3f1b-4275-9efd-938c09e105fe.png)
 
 <br>
 
 ### 📎 API 명세서
-![SA API 명세서2](https://user-images.githubusercontent.com/96563183/175494370-68fd474f-0848-4c3b-ac24-9f6037a4ebdd.png)
+![SA API 명세서6](https://user-images.githubusercontent.com/96563183/175560067-5e3dc916-30c6-4454-8c8c-069c4902be82.png)
+
