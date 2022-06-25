@@ -6,8 +6,10 @@ from user.models import User as UserModel
 from user.models import UserAddress as UserAddressModel
 
 """"""
-class UserAdmin(BaseUserAdmin):
+class CustomUserAdmin(BaseUserAdmin):
     model = UserModel
+    ordering = ('userid',)
+
     list_display = ("id", "userid", "name")
     list_display_links = ("id", "userid")
     list_filter = ("userid", "name")
@@ -28,5 +30,5 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(Group)
 
 # Register your models here.
-admin.site.register(UserModel, UserAdmin)
+admin.site.register(UserModel, CustomUserAdmin)
 admin.site.register(UserAddressModel)
