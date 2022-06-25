@@ -33,7 +33,8 @@ class User(AbstractBaseUser):
     id = models.BigAutoField(primary_key=True)
     userid = models.CharField("사용자 계정", max_length=20, unique=True)
     password = models.CharField("비밀번호", max_length=128)
-    profile_image = models.ImageField("프로필 사진", upload_to="user/profile/", max_length=None)
+    profile_image = models.ImageField("프로필 사진", upload_to="user/profile/", max_length=None,
+                                      default="user/profile/default_profile_image.jpg")
     name = models.CharField("이름", max_length=20)
     email = models.EmailField("이메일 주소", max_length=100, unique=True)
     gender = models.BooleanField("성별")
