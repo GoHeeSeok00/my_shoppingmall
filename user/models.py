@@ -81,3 +81,12 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+
+
+class UserAddress(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(to=User, verbose_name="회원", on_delete=models.CASCADE)
+    address = models.CharField("주소", max_length=100)
+    zip_code = models.CharField("우편번호", max_length=10)
+    address_tag = models.CharField("배송지명", max_length=20)
+    name = models.CharField("받는분 성함", max_length=20)
