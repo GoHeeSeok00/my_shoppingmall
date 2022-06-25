@@ -21,6 +21,45 @@ DRF를 공부하고 만든 첫 프로젝트이며 혼자서 모든것을 담당�
   - **✔**API 관리 툴 : postman
 
   - **✔**개발툴: PyCharm
+  
+<br>
+
+### 📎 브랜치 구조
+  - main  
+    - feature
+      - user
+      - product
+      - order
+
+<br>
+
+### 📎 커밋 컨벤션
+  - 규칙
+    - 제목
+    - 본문
+    - 푸터
+
+```
+ ∙ 각 사항은 공백의 라인으로 구분한다.
+ ∙ 제목 줄은 가급적 50자로 제한하고, 가능한 간결하게 작성한다.
+ ∙ 제목의 시작은 대문자로 작성한다.
+ ∙ 제목에 마침표를 사용하지 않는다.
+ ∙ 제목은 동사로 시작하여 명령형으로 작성한다.
+ ∙ 본문을 통해 무엇을, 왜 등을 설명한다.
+ ∙ 본문은 72자가 넘어가는 경우 줄바꿈을 시행한다.
+```
+
+  - 자주 사용하는 단어
+    - Add: 무언가 추가할 때 사용한다. 
+    - Fix: 잘못된 동작을 고칠 때 주로 사용한다.
+    - Remove: 삭제가 있을 때 사용한다.
+    - Simplify: 코드를 단순화 했을 때 사용한다.
+    - Update: Fix와 달리 원래 정상적으로 동작했지만 보완하는 개념이다.
+    - Implement: 무언가 구현을 달성했을 때 사용한다. 큰 단위에 작성하면 좋다.
+    - Prevent: 특정한 동작을 못하게 막을 때 사용한다.
+    - Move: 코드나 파일의 이동에 사용한다.
+    - Rename: 이름의 변경이 있을 때, Rename A to B의 형태로 많이 쓰인다.
+
 
 <br>
 
@@ -45,15 +84,15 @@ DRF를 공부하고 만든 첫 프로젝트이며 혼자서 모든것을 담당�
 
 ### 📎 모델 설계 (ERD)
   - 사용 서비스 : ERDCloud
-![ERD](https://user-images.githubusercontent.com/96563183/175491843-8208cebf-d26c-44ea-b0bc-d9288472318e.png)
-
+![ERD 1차 수정](https://user-images.githubusercontent.com/96563183/175559947-54e6b6d5-ed77-42ae-bcb7-ecf8201a848f.png)
 
 <br>
 
 ### 📎 테이블 명세서
-![SA 테이블 명세서](https://user-images.githubusercontent.com/96563183/175493018-9b8b064a-c1d4-4812-9049-d59c90f435e0.png)
+![SA 테이블 명세서3](https://user-images.githubusercontent.com/96563183/175560025-695c541d-3f1b-4275-9efd-938c09e105fe.png)
 
 <br>
 
 ### 📎 API 명세서
-![SA API 명세서2](https://user-images.githubusercontent.com/96563183/175494370-68fd474f-0848-4c3b-ac24-9f6037a4ebdd.png)
+![SA API 명세서6](https://user-images.githubusercontent.com/96563183/175560067-5e3dc916-30c6-4454-8c8c-069c4902be82.png)
+
