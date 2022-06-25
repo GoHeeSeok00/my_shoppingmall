@@ -17,8 +17,8 @@ class CustomUserAdmin(BaseUserAdmin):
     readonly_fields = ("userid", "join_date")
 
     fieldsets = (
-        ("info", {"fields": ("userid", "password", "profile_image", "email", "name", "gender", "date_of_birth", "mobile_number",
-                             "introduce", "join_date", "is_secession")}),
+        ("info", {"fields": ("userid", "password", "profile_image", "email", "name", "gender", "date_of_birth",
+                             "mobile_number", "introduce", "join_date", "is_secession")}),
         ("Agreement", {"fields": ("is_terms_of_service", "is_privacy_policy", "is_receive_marketing_info")}),
         ("permissions", {"fields": ("is_admin", "is_seller", "is_active")})
     )
