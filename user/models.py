@@ -6,27 +6,39 @@ from django.db import models
 # Create your models here.
 # custom user model 사용 시 UserManager 클래스와 create_user, create_superuser 함수가 정의되어 있어야 함
 class CustomUserManager(BaseUserManager):
-    def create_user(self, userid, password=None):
+    def create_user(self, userid, password, email, **extra_fields):
         if not userid:
             raise ValueError('Users must have an userid')
         user = self.model(
             userid=userid,
+            email=email,
+            **extra_fields
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
     # python manage.py createsuperuser 사용 시 해당 함수가 사용됨
-    def create_superuser(self, userid, password, email=None):
-        user = self.create_user(
+    def create_superuser(self, userid, password, email, **extra_fields):
+        """관리자 계정을 생성하기 위해 extra_fields 세팅"""
+        extra_fields.setdefault("name", "관리자")
+        extra_fields.setdefault("gender", True)
+        extra_fields.setdefault("date_of_birth", "1993-08-12")
+        extra_fields.setdefault("mobile_number", "010-0000-0000")
+        extra_fields.setdefault("introduce", "관리자 계정입니다.")
+        extra_fields.setdefault("is_terms_of_service", True)
+        extra_fields.setdefault("is_privacy_policy", True)
+        extra_fields.setdefault("is_receive_marketing_info", False)
+        extra_fields.setdefault("is_admin", True)
+        super_user  = self.create_user(
             userid=userid,
             password=password,
+            email=email,
+            **extra_fields
         )
-        user.is_admin = True
-        if email is not None:
-            user.email = email # 메일 저장
-        user.save(using=self._db)
-        return user
+        # user.is_admin = True
+        # super_user .save(using=self._db)
+        return super_user
 
 
 class User(AbstractBaseUser):
@@ -42,7 +54,7 @@ class User(AbstractBaseUser):
     mobile_number = models.CharField("휴대전화", max_length=20)
     introduce = models.CharField("소개", max_length=200)
     join_date = models.DateTimeField("가입일", auto_now_add=True)
-    is_seller = models.BooleanField("판매자")
+    is_seller = models.BooleanField("판매자", default=False)
     is_terms_of_service = models.BooleanField("서비스이용약관동의")
     is_privacy_policy = models.BooleanField("개인정보처리방침동의")
     is_receive_marketing_info = models.BooleanField("마케팅정보수신동의")
