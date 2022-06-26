@@ -28,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserModel
-        fields = ["username", "password", "name", "email", "gender", "date_of_birth", "mobile_number", "introduce",
+        fields = ["username", "profile_image", "password", "name", "email", "gender", "date_of_birth", "mobile_number", "introduce",
                   "join_date", "is_seller", "is_terms_of_service", "is_privacy_policy", "is_receive_marketing_info",
                   "useraddress_set"]
         extra_kwargs = {
