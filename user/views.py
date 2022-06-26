@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from user.models import User as UserModel
-from user.serializers import UserSerializer
+from user.serializers import UserSerializer, UserDetailSerializer
 
 """"""
 # create custom permission
@@ -52,7 +52,13 @@ class UserApiView(APIView):
 class UserDetailApiView(APIView):
     permission_classes = [permissions.AllowAny]
     def get(self, request, obj_id):
-        return Response()
+        # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
+        try:
+            user = UserModel.objects.get(id=obj_id)
+        except UserModel.DoesNotExist:
+            # some event
+            return Response({"error": "존재하지 않는 사용자 입니다."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(UserDetailSerializer(user).data, status=status.HTTP_200_OK)
     def put(self, request, obj_id):
         return Response()
     def delete(self, request, obj_id):
