@@ -59,8 +59,19 @@ class UserDetailApiView(APIView):
             # some event
             return Response({"error": "존재하지 않는 사용자 입니다."}, status=status.HTTP_404_NOT_FOUND)
         return Response(UserDetailSerializer(user).data, status=status.HTTP_200_OK)
+
     def put(self, request, obj_id):
-        return Response()
+        # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
+        try:
+            user = UserModel.objects.get(id=obj_id)
+        except UserModel.DoesNotExist:
+            # some event
+            return Response({"error": "존재하지 않는 사용자 입니다."}, status=status.HTTP_404_NOT_FOUND)
+        user_serializer = UserDetailSerializer(user, data=request.data, partial=True)
+        user_serializer.is_valid(raise_exception=True)
+        user_serializer.save()
+        return Response({"message": "프로필 수정 성공!!"}, status=status.HTTP_200_OK)
+
     def delete(self, request, obj_id):
         return Response()
 
