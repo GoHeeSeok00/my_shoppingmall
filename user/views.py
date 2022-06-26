@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework import permissions
@@ -38,3 +39,24 @@ class UserApiView(APIView):
         user_serializer.is_valid(raise_exception=True)
         user_serializer.save()
         return Response({"message": "회원가입 성공!!"}, status=status.HTTP_200_OK)
+
+
+# 로그인 view
+class LoginApiView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def post(self, request):
+        username = request.data.get('username', '')
+        password = request.data.get('password', '')
+        user = authenticate(request, username=username, password=password)
+        if not user:
+            return Response({"error": "존재하지 않는 계정이거나 패스워드가 일치하지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
+        login(request, user)
+        return Response({"message": "로그인 성공!!"}, status=status.HTTP_200_OK)
+
+
+# 로그아웃 view
+class LogoutApiView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):
+        logout(request)
+        return Response({"message": "로그아웃 성공!!"}, status=status.HTTP_200_OK)
