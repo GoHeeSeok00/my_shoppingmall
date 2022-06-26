@@ -86,7 +86,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
             "password": {"write_only": True},
             "gender": {"write_only": True},
         }
-        read_only_fields = ["join_date", "is_seller", "is_terms_of_service", "is_receive_marketing_info"]
+        read_only_fields = ["username", "join_date", "is_seller", "is_terms_of_service", "is_receive_marketing_info"]
 
     def update(self, instance, validated_data):
         # instance에는 입력된 object가 담긴다.
