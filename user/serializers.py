@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
         gender = serializers.SerializerMethodField()
 
 
-        fields = ["user", "password", "name", "email", "gender", "date_of_birth", "mobile_number", "introduce",
+        fields = ["username", "password", "name", "email", "gender", "date_of_birth", "mobile_number", "introduce",
                   "join_date", "is_seller", "is_terms_of_service", "is_privacy_policy", "is_receive_marketing_info"]
         extra_kwargs = {
             "password": {"write_only": True}
