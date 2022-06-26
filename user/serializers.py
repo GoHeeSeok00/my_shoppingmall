@@ -18,25 +18,31 @@ class UserAddressSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """회원가입 및 프로필 수정(allow), 전체 회원 조회(admin)"""
-    gender = serializers.SerializerMethodField()
-    useraddress_set = UserAddressSerializer(many=True)
-    def get_gender(self, obj):
+    """
+    회원가입(is not authenticate)
+    전체 회원 조회(admin)
+    """
+    gender_str = serializers.SerializerMethodField()
+    useraddress_set = UserAddressSerializer(many=True, required=False)
+    def get_gender_str(self, obj):
         if obj.gender:
             return "남자"
         return "여자"
 
     class Meta:
         model = UserModel
-        fields = ["username", "profile_image", "password", "name", "email", "gender", "date_of_birth", "mobile_number", "introduce",
-                  "join_date", "is_seller", "is_terms_of_service", "is_privacy_policy", "is_receive_marketing_info",
-                  "useraddress_set"]
+        fields = ["username", "profile_image", "password", "name", "email", "gender", "gender_str", "date_of_birth",
+                  "mobile_number", "introduce", "join_date", "is_seller", "is_terms_of_service", "is_privacy_policy",
+                  "is_receive_marketing_info", "useraddress_set"]
         extra_kwargs = {
-            "password": {"write_only": True}
+            "password": {"write_only": True},
+            "gender": {"write_only": True},
+            "introduce": {"required": False}
         }
-        read_only_fields = ["join_date", "is_seller", "is_terms_of_service", "is_privacy_policy"]
+        read_only_fields = ["join_date"]
 
     def validate(self, data):
+        print(f"validate: {data}")
         # custom validation pattern
         if not data.get("is_terms_of_service", "") or not data.get("is_privacy_policy"):
             # validation에 통과하지 못할 경우 ValidationError class 호출
@@ -49,21 +55,13 @@ class UserSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        print(f"create: {validated_data}")
         # User object 생성
-        user = UserModel(**validated_data)
+        instance = UserModel(**validated_data)
         if validated_data["is_seller"]:
             # 판매자 계정의 경우 관리자가 승인해줘야되기 때문에 is_active를 False로 바꿔준다.
-            user.is_active = False
-        user.introduce = F"안녕하세요~ {validated_data['name']}입니다"
-        user.save()
-
-    def update(self, instance, validated_data):
-        # instance에는 입력된 object가 담긴다.
-        for key, value in validated_data.items():
-            if key == "password":
-                instance.set_password(value)
-                continue
-
-            setattr(instance, key, value)
+            instance.is_active = False
+        instance.introduce = F"안녕하세요~ {validated_data['name']}입니다"
+        instance.set_password(validated_data["password"])
         instance.save()
         return instance

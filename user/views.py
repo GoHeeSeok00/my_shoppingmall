@@ -35,6 +35,12 @@ class UserApiView(APIView):
         return Response(user_serializer, status=status.HTTP_200_OK)
 
     def post(self, request):
+        password1 = request.data["password"]
+        password2 = request.data["password2"]
+        # 비밀번호 일치 여부 확인
+        if password1 != password2:
+            return Response({"error": "비밀번호가 일치하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
+        print(request.data)
         user_serializer = UserSerializer(data=request.data)
         user_serializer.is_valid(raise_exception=True)
         user_serializer.save()
