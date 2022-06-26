@@ -42,12 +42,21 @@ class UserApiView(APIView):
         # 비밀번호 일치 여부 확인
         if password1 != password2:
             return Response({"error": "비밀번호가 일치하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
-        print(request.data)
+        # print(request.data)
         user_serializer = UserSerializer(data=request.data)
         user_serializer.is_valid(raise_exception=True)
         user_serializer.save()
         return Response({"message": "회원가입 성공!!"}, status=status.HTTP_200_OK)
 
+
+class UserDetailApiView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def get(self, request, obj_id):
+        return Response()
+    def put(self, request, obj_id):
+        return Response()
+    def delete(self, request, obj_id):
+        return Response()
 
 # 로그인 view
 class LoginApiView(APIView):
