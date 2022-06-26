@@ -6,11 +6,11 @@ from django.db import models
 # Create your models here.
 # custom user model 사용 시 UserManager 클래스와 create_user, create_superuser 함수가 정의되어 있어야 함
 class CustomUserManager(BaseUserManager):
-    def create_user(self, userid, password, email, **extra_fields):
-        if not userid:
-            raise ValueError('Users must have an userid')
+    def create_user(self, username, password, email, **extra_fields):
+        if not username:
+            raise ValueError('Users must have an username')
         user = self.model(
-            userid=userid,
+            username=username,
             email=email,
             **extra_fields
         )
@@ -19,7 +19,7 @@ class CustomUserManager(BaseUserManager):
         return user
 
     # python manage.py createsuperuser 사용 시 해당 함수가 사용됨
-    def create_superuser(self, userid, password, email, **extra_fields):
+    def create_superuser(self, username, password, email, **extra_fields):
         """관리자 계정을 생성하기 위해 extra_fields 세팅"""
         extra_fields.setdefault("name", "관리자")
         extra_fields.setdefault("gender", True)
@@ -31,7 +31,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_receive_marketing_info", False)
         extra_fields.setdefault("is_admin", True)
         super_user  = self.create_user(
-            userid=userid,
+            username=username,
             password=password,
             email=email,
             **extra_fields
@@ -43,7 +43,7 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     id = models.BigAutoField(primary_key=True)
-    userid = models.CharField("사용자 계정", max_length=20, unique=True)
+    username = models.CharField("사용자 계정", max_length=20, unique=True)
     password = models.CharField("비밀번호", max_length=128)
     profile_image = models.ImageField("프로필 사진", upload_to="user/profile/", max_length=None,
                                       default="user/profile/default_profile_image.jpg")
@@ -69,7 +69,7 @@ class User(AbstractBaseUser):
 
     # id로 사용 할 필드 지정.
     # 로그인 시 USERNAME_FIELD에 설정 된 필드와 password가 사용된다.
-    USERNAME_FIELD = 'userid'
+    USERNAME_FIELD = 'username'
 
     # user를 생성할 때 입력받을 필드 지정
     REQUIRED_FIELDS = ["email",]
@@ -77,7 +77,7 @@ class User(AbstractBaseUser):
     objects = CustomUserManager()  # custom user 생성 시 필요
 
     def __str__(self):
-        return self.userid
+        return self.username
 
     # 로그인 사용자의 특정 테이블의 crud 권한을 설정, perm table의 crud 권한이 들어간다.
     # admin일 경우 항상 True, 비활성 사용자(is_active=False)의 경우 항상 False

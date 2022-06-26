@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
                 ('id', models.BigAutoField(primary_key=True, serialize=False)),
-                ('userid', models.CharField(max_length=20, unique=True, verbose_name='사용자 계정')),
+                ('username', models.CharField(max_length=20, unique=True, verbose_name='사용자 계정')),
                 ('password', models.CharField(max_length=128, verbose_name='비밀번호')),
                 ('profile_image', models.ImageField(default='user/profile/default_profile_image.jpg', upload_to='user/profile/', verbose_name='프로필 사진')),
                 ('name', models.CharField(max_length=20, verbose_name='이름')),

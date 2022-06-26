@@ -8,16 +8,17 @@ from user.models import UserAddress as UserAddressModel
 """"""
 class CustomUserAdmin(BaseUserAdmin):
     model = UserModel
-    ordering = ('userid',)
+    ordering = ('username',)
 
-    list_display = ("id", "userid", "name", "profile_image")
-    list_display_links = ("id", "userid")
-    list_filter = ("userid", "name")
-    search_fields = ("userid", "name")
-    readonly_fields = ("userid", "join_date")
+    list_display = ("id", "profile_image", "username", "name", "is_seller", "is_active", "last_login")
+    list_display_links = ("id", "username")
+    # is_seller = T, is_active = F, last_login = nodata 필터  => 관리자 승인을 기다리는 판매자 회원 가입
+    list_filter = ("is_seller", "is_active", "last_login")
+    search_fields = ("username", "name")
+    readonly_fields = ("username", "join_date")
 
     fieldsets = (
-        ("info", {"fields": ("userid", "password", "profile_image", "email", "name", "gender", "date_of_birth",
+        ("info", {"fields": ("username", "password", "profile_image", "email", "name", "gender", "date_of_birth",
                              "mobile_number", "introduce", "join_date", "is_secession")}),
         ("Agreement", {"fields": ("is_terms_of_service", "is_privacy_policy", "is_receive_marketing_info")}),
         ("permissions", {"fields": ("is_admin", "is_seller", "is_active")})
