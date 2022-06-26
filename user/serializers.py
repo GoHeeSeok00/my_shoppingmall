@@ -14,7 +14,7 @@ class UserAddressSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     """회원가입 및 프로필 수정(allow), 전체 회원 조회(admin)"""
     gender = serializers.SerializerMethodField()
-    useraddress_set = UserAddressSerializer
+    useraddress_set = UserAddressSerializer(many=True)
     def get_gender(self, obj):
         if obj.gender:
             return "남자"
