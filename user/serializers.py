@@ -31,6 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserModel
+        # default 값이 있는 필드는 data들어올 때 key, value가 없어도 validate 통과 //
         fields = ["username", "profile_image", "password", "name", "email", "gender", "gender_str", "date_of_birth",
                   "mobile_number", "introduce", "join_date", "is_seller", "is_terms_of_service", "is_privacy_policy",
                   "is_receive_marketing_info", "useraddress_set"]
