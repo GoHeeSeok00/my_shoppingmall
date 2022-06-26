@@ -4,6 +4,12 @@ from user.models import User as UserModel
 from user.models import UserAddress as UserAddressModel
 
 """"""
+class OtherUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ["username", "name", "profile_image", "introduce", "is_seller"]
+
+
 class UserAddressSerializer(serializers.ModelSerializer):
     """회원 주소 등록, 조회, 수정"""
     class Meta:
