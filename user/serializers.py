@@ -1,10 +1,20 @@
 from rest_framework import serializers
 
 from user.models import User as UserModel
+from user.models import UserAddress as UserAddressModel
 
 """"""
+class UserAddressSerializer(serializers.ModelSerializer):
+    """회원 주소 등록, 조회, 수정"""
+    class Meta:
+        model = UserAddressModel
+        fields = ["address", "zip_code", "address_tag", "name"]
+
+
 class UserSerializer(serializers.ModelSerializer):
     """회원가입 및 프로필 수정(allow), 전체 회원 조회(admin)"""
+    gender = serializers.SerializerMethodField()
+    useraddress_set = UserAddressSerializer
     def get_gender(self, obj):
         if obj.gender:
             return "남자"
@@ -12,11 +22,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserModel
-        gender = serializers.SerializerMethodField()
-
-
         fields = ["username", "password", "name", "email", "gender", "date_of_birth", "mobile_number", "introduce",
-                  "join_date", "is_seller", "is_terms_of_service", "is_privacy_policy", "is_receive_marketing_info"]
+                  "join_date", "is_seller", "is_terms_of_service", "is_privacy_policy", "is_receive_marketing_info",
+                  "useraddress_set"]
         extra_kwargs = {
             "password": {"write_only": True}
         }
