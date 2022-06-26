@@ -29,9 +29,12 @@ class IsAdminOrCreateOnly(permissions.BasePermission):
 # Create your views here.
 class UserApiView(APIView):
     permission_classes = [IsAdminOrCreateOnly]
-    def get(self):
+    def get(self, request):
         user_serializer = UserSerializer(UserModel.objects.all(), many=True).data
         return Response(user_serializer, status=status.HTTP_200_OK)
 
-    def post(self):
-        return Response()
+    def post(self, request):
+        user_serializer = UserSerializer(data=request.data)
+        user_serializer.is_valid(raise_exception=True)
+        user_serializer.save()
+        return Response({"message": "회원가입 성공!!"}, status=status.HTTP_200_OK)
