@@ -1,11 +1,20 @@
 from rest_framework import serializers
 
 from product.models import Product as ProductModel
+from product.models import Category as CategoryModel
+from product.models import ProductImage as ProductImageModel
+from product.models import ProductOption as ProductOptionModel
 
 """"""
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImageModel
+        fields = ["product", "image1", "image2", "image3", "image4", "image5"]
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProductModel
+        model = CategoryModel
         fields = ["name"]
 
 
