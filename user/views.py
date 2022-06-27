@@ -7,10 +7,10 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from config.permissions import IsAdminOrNotAuthenticatedCreateOnly, IsOwnerOrReadOnly
+from config.permissions import IsAdminOrNotAuthenticatedCreateOnly, IsOwnerOrReadOnly, IsOwner
 from user.models import User as UserModel
-from user.serializers import UserSerializer, UserDetailSerializer
-
+from user.models import UserAddress as UserAddressModel
+from user.serializers import UserSerializer, UserDetailSerializer, UserAddressSerializer
 
 """"""
 # Create your views here.
@@ -44,7 +44,7 @@ class UserDetailApiView(APIView):
             user = UserModel.objects.get(id=obj_id)
         except UserModel.DoesNotExist:
             # some event
-            return Response({"error": "존재하지 않는 사용자 입니다."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "존재하지 않는 사용자입니다."}, status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(self.request, user)
         return user
 
@@ -123,3 +123,19 @@ class LogoutApiView(APIView):
 
 
 # 회원 주소 api
+class UserAddressApiView(APIView):
+    permission_classes = [IsOwner]
+
+    def get_user_address_object_and_check_permission(self, obj_id):
+        # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
+        try:
+            address = UserAddressModel.objects.get(id=obj_id)
+        except UserAddressModel.DoesNotExist:
+            # some event
+            return Response({"error": "존재하지 않는 오브젝트입니다."}, status=status.HTTP_404_NOT_FOUND)
+        self.check_object_permissions(self.request, address)
+        return address
+
+    def get(self, request, obj_id):
+        address = self.get_user_address_object_and_check_permission(obj_id)
+        return Response(UserAddressSerializer(address).data, status=status.HTTP_200_OK)
