@@ -28,7 +28,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=True)
     productimage_set = ProductImageSerializer(many=True)
-    productoption_set = ProductOptionSerializer(many=True)
+    productoption_set = ProductOptionSerializer(many=True, required=False)
 
     class Meta:
         model = ProductModel
