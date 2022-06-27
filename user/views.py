@@ -7,7 +7,7 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from config.permissions import IsAdminOrNotAuthenticatedCreateOnly
+from config.permissions import IsAdminOrNotAuthenticatedCreateOnly, IsOwnerOrReadOnly
 from user.models import User as UserModel
 from user.serializers import UserSerializer, UserDetailSerializer
 
@@ -34,7 +34,7 @@ class UserApiView(APIView):
 
 
 class UserDetailApiView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsOwnerOrReadOnly]
     def get(self, request, obj_id):
         # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
         try:
