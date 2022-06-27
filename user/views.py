@@ -77,7 +77,6 @@ class UserDetailApiView(APIView):
         # data = self.str_to_boolean_of_data_value(data, "gender", "남자", "여자")
         # data = self.str_to_boolean_of_data_value(data, "is_receive_marketing_info", "ture", "false")
         ###########################################################################
-        print(data)
         user_serializer = UserDetailSerializer(user, data=data, partial=True)
         user_serializer.is_valid(raise_exception=True)
         user_serializer.save()
@@ -85,7 +84,7 @@ class UserDetailApiView(APIView):
 
     def delete(self, request, obj_id):
         user = self.get_object(obj_id)
-        user.is_active = True
+        user.is_active = False
         user.save()
         # is_active 필드 변경 후 로그아웃 // 이후부터 로그인 못함
         logout(request)
@@ -101,7 +100,12 @@ class LoginApiView(APIView):
         if not user:
             return Response(
                 {"error": "존재하지 않는 계정이거나 패스워드가 일치하지 않습니다."},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_404_NOT_FOUND
+            )
+        if user.is_approve == False:
+            return Response(
+                {"error": "관리자 승인을 기다려주세요."},
+                status=status.HTTP_403_FORBIDDEN
             )
         login(request, user)
         return Response({"message": "로그인 성공!!"}, status=status.HTTP_200_OK)
