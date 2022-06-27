@@ -44,3 +44,21 @@ class IsOwnerOrReadOnly(BasePermission):
             return False
         return False
 
+
+class IsOwner(BasePermission):
+    """
+    관리자는 모든 접근 가능
+    작성자는 모든 접근 가능
+    """
+    def has_object_permission(self, request, view, obj):
+        user = request.user
+
+        if user.is_authenticated:
+            if user.is_admin:
+                return True
+            elif obj.__class__ == get_user_model():
+                return obj.id == user.id
+            elif hasattr(obj, "user"):
+                return obj.user.id == user.id
+            return False
+        return False
