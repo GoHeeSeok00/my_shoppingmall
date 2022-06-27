@@ -145,3 +145,10 @@ class UserAddressApiView(APIView):
         address_serializer.is_valid(raise_exception=True)
         address_serializer.save()
         return Response({"message": "주소 등록 성공!!"}, status=status.HTTP_200_OK)
+
+    def put(self, request, obj_id):
+        address = self.get_user_address_object_and_check_permission(obj_id)
+        address_serializer = UserAddressSerializer(address, data=request.data, partial=True)
+        address_serializer.is_valid(raise_exception=True)
+        address_serializer.save()
+        return Response({"message": "주소 수정 성공!!"}, status=status.HTTP_200_OK)
