@@ -7,6 +7,8 @@ from user.models import User as UserModel
 # Create your models here.
 class Category(models.Model):
     name = models.CharField("카테고리명", max_length=20)
+    def __str__(self):
+        return self.name
 
 class Product(models.Model):
     id = models.BigAutoField(primary_key=True)
