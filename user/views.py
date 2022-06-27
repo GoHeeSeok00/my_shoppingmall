@@ -46,6 +46,17 @@ class UserDetailApiView(APIView):
         self.check_object_permissions(self.request, user)
         return user
 
+    def str_to_boolean_of_data_value(self, data, key, true_word, false_word):
+        try:
+            if data[key] == true_word:
+                data[key] = True
+            elif data[key] == false_word:
+                data[key] = False
+        except KeyError:
+            pass
+        return data
+
+
     def get(self, request, obj_id):
         user = self.get_object(obj_id)
         return Response(UserDetailSerializer(user).data, status=status.HTTP_200_OK)
@@ -56,16 +67,17 @@ class UserDetailApiView(APIView):
         data = OrderedDict()
         data.update(request.data)
 
+        ###########################################################################
+        """
+        클라이언트에서 boolean 값을 전달 할 수 있으면 불필요한 과정
+        postman으로 테스트 시 file 데이터 때문에 form-data를 이용하지만 
+        boolean 값이 없어서 str을 boolean으로 바꿔주는 과정
+        """
         # str to boolean // data type 변경
-        if data["gender"] == "남자":
-            data["gender"] = True
-        elif data["gender"] == "여자":
-            data["gender"] = False
-        if data["is_receive_marketing_info"] == "True":
-            data["is_receive_marketing_info"] = True
-        elif data["is_receive_marketing_info"] == "False":
-            data["is_receive_marketing_info"] = False
-
+        # data = self.str_to_boolean_of_data_value(data, "gender", "남자", "여자")
+        # data = self.str_to_boolean_of_data_value(data, "is_receive_marketing_info", "ture", "false")
+        ###########################################################################
+        print(data)
         user_serializer = UserDetailSerializer(user, data=data, partial=True)
         user_serializer.is_valid(raise_exception=True)
         user_serializer.save()
