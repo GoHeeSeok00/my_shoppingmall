@@ -4,6 +4,7 @@
 
 ## image 파일 ##
 product/thumbnail
+product/image
 
 ## My_settings ##
 config/my_settings.py
