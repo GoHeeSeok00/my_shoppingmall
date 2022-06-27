@@ -1,5 +1,5 @@
+from django.contrib.auth import get_user_model
 from rest_framework.permissions import BasePermission
-
 
 """"""
 # create custom permission
@@ -20,3 +20,27 @@ class IsAdminOrNotAuthenticatedCreateOnly(BasePermission):
             return True
 
         return False
+
+
+class IsOwnerOrReadOnly(BasePermission):
+    """
+    GET method이면 Read만 가능
+    관리자는 모든 접근 가능
+    작성자는 모든 접근 가능
+    """
+    SAFE_METHODS = ("GET",)
+    def has_object_permission(self, request, view, obj):
+        user = request.user
+
+        if request.method in self.SAFE_METHODS:
+            return True
+        elif user.is_authenticated:
+            if user.is_admin:
+                return True
+            elif obj.__class__ == get_user_model():
+                return obj.id == user.id
+            elif hasattr(obj, "user"):
+                return obj.user.id == user.id
+            return False
+        return False
+
