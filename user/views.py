@@ -141,7 +141,7 @@ class UserAddressApiView(APIView):
         return Response(UserAddressSerializer(address).data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        address_serializer = UserAddressSerializer(data=request.data)
+        address_serializer = UserAddressSerializer(data=request.data, context={"request": request})
         address_serializer.is_valid(raise_exception=True)
         address_serializer.save()
         return Response({"message": "주소 등록 성공!!"}, status=status.HTTP_200_OK)

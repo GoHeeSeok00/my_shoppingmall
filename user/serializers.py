@@ -16,6 +16,12 @@ class UserAddressSerializer(serializers.ModelSerializer):
         model = UserAddressModel
         fields = ["address", "zip_code", "address_tag", "name"]
 
+    def create(self, validated_data):
+        instance = UserAddressModel(**validated_data)
+        instance.user = self.context["request"].user
+        instance.save()
+        return instance
+
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -43,7 +49,6 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ["join_date", "is_approve"]
 
     def validate(self, data):
-        print(f"validate: {data}")
         # custom validation pattern
         if not data.get("is_terms_of_service", "") or not data.get("is_privacy_policy"):
             # validation에 통과하지 못할 경우 ValidationError class 호출
@@ -56,7 +61,6 @@ class UserSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        print(f"create: {validated_data}")
         # User object 생성
         instance = UserModel(**validated_data)
         if validated_data["is_seller"]:
