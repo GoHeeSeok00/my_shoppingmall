@@ -44,7 +44,7 @@ class UserDetailApiView(APIView):
             user = UserModel.objects.get(id=obj_id)
         except UserModel.DoesNotExist:
             # some event
-            return Response({"error": "존재하지 않는 사용자입니다."}, status=status.HTTP_404_NOT_FOUND)
+            return
         self.check_object_permissions(self.request, user)
         return user
 
@@ -61,10 +61,14 @@ class UserDetailApiView(APIView):
 
     def get(self, request, obj_id):
         user = self.get_user_object_and_check_permission(obj_id)
+        if not user:
+            return Response({"error": "존재하지 않는 사용자입니다."}, status=status.HTTP_404_NOT_FOUND)
         return Response(UserDetailSerializer(user).data, status=status.HTTP_200_OK)
 
     def put(self, request, obj_id):
         user = self.get_user_object_and_check_permission(obj_id)
+        if not user:
+            return Response({"error": "존재하지 않는 사용자입니다."}, status=status.HTTP_404_NOT_FOUND)
 
         data = OrderedDict()
         data.update(request.data)
@@ -86,6 +90,9 @@ class UserDetailApiView(APIView):
 
     def delete(self, request, obj_id):
         user = self.get_user_object_and_check_permission(obj_id)
+        if not user:
+            return Response({"error": "존재하지 않는 사용자입니다."}, status=status.HTTP_404_NOT_FOUND)
+
         user.is_active = False
         user.save()
         # is_active 필드 변경 후 로그아웃 // 이후부터 로그인 못함
@@ -132,12 +139,14 @@ class UserAddressApiView(APIView):
             address = UserAddressModel.objects.get(id=obj_id)
         except UserAddressModel.DoesNotExist:
             # some event
-            return Response({"error": "존재하지 않는 오브젝트입니다."}, status=status.HTTP_404_NOT_FOUND)
+            return
         self.check_object_permissions(self.request, address)
         return address
 
     def get(self, request, obj_id):
         address = self.get_user_address_object_and_check_permission(obj_id)
+        if not address:
+            return Response({"error": "존재하지 않는 오브젝트입니다."}, status=status.HTTP_404_NOT_FOUND)
         return Response(UserAddressSerializer(address).data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -148,11 +157,16 @@ class UserAddressApiView(APIView):
 
     def put(self, request, obj_id):
         address = self.get_user_address_object_and_check_permission(obj_id)
+        if not address:
+            return Response({"error": "존재하지 않는 오브젝트입니다."}, status=status.HTTP_404_NOT_FOUND)
         address_serializer = UserAddressSerializer(address, data=request.data, partial=True)
         address_serializer.is_valid(raise_exception=True)
         address_serializer.save()
         return Response({"message": "주소 수정 성공!!"}, status=status.HTTP_200_OK)
 
     def delete(self, request, obj_id):
-        UserAddressModel.objects.filter(id=obj_id).delete()
+        address = self.get_user_address_object_and_check_permission(obj_id)
+        if not address:
+            return Response({"error": "존재하지 않는 오브젝트입니다."}, status=status.HTTP_404_NOT_FOUND)
+        address.delete()
         return Response({"message": "주소 삭제 성공!!"})
