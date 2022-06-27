@@ -27,10 +27,13 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=True)
+    productimage_set = ProductImageSerializer(many=True)
+    productoption_set = ProductOptionSerializer(many=True)
+
     class Meta:
         model = ProductModel
         fields = ["user", "title", "category", "thumbnail", "description", "view_count", "is_active", "is_delete",
-                  "created_at", "updated_at"]
+                  "created_at", "updated_at", "productimage_set", "productoption_set"]
         extra_kwargs = {
             "is_delete": {"write_only": True}
         }
