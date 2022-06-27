@@ -152,3 +152,7 @@ class UserAddressApiView(APIView):
         address_serializer.is_valid(raise_exception=True)
         address_serializer.save()
         return Response({"message": "주소 수정 성공!!"}, status=status.HTTP_200_OK)
+
+    def delete(self, request, obj_id):
+        UserAddressModel.objects.filter(id=obj_id).delete()
+        return Response({"message": "주소 삭제 성공!!"})
