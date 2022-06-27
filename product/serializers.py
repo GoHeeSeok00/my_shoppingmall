@@ -3,6 +3,12 @@ from rest_framework import serializers
 from product.models import Product as ProductModel
 
 """"""
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductModel
+        fields = ["name"]
+
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductModel
