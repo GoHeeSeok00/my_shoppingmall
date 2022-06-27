@@ -14,6 +14,7 @@ from user.serializers import UserSerializer, UserDetailSerializer
 
 """"""
 # Create your views here.
+# 회원 등록, 조회 api
 class UserApiView(APIView):
     permission_classes = [IsAdminOrNotAuthenticatedCreateOnly]
     def get(self, request):
@@ -33,6 +34,7 @@ class UserApiView(APIView):
         return Response({"message": "회원가입 성공!!"}, status=status.HTTP_200_OK)
 
 
+# 회원 상세 정보 api
 class UserDetailApiView(APIView):
     permission_classes = [IsOwnerOrReadOnly]
 
@@ -90,7 +92,8 @@ class UserDetailApiView(APIView):
         logout(request)
         return Response({"message": "탈퇴 완료"})
 
-# 로그인 view
+
+# 로그인 api
 class LoginApiView(APIView):
     permission_classes = [permissions.AllowAny]
     def post(self, request):
@@ -111,9 +114,12 @@ class LoginApiView(APIView):
         return Response({"message": "로그인 성공!!"}, status=status.HTTP_200_OK)
 
 
-# 로그아웃 view
+# 로그아웃 api
 class LogoutApiView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request):
         logout(request)
         return Response({"message": "로그아웃 성공!!"}, status=status.HTTP_200_OK)
+
+
+# 회원 주소 api
