@@ -15,7 +15,8 @@ class Product(models.Model):
     thumbnail = models.ImageField("썸네일", upload_to="product/thumbnail/", max_length=None)
     description = models.TextField("상품 설명")
     view_count = models.BigIntegerField("상품 조회수", default=0)
-    is_active = models.BooleanField("활성화 상태", default=False)
+    is_active = models.BooleanField("활성화 상태", default=True)
+    is_delete = models.BooleanField("삭제 여부", default=False)
     created_at = models.DateTimeField("작성시간", auto_now_add=True)
     updated_at = models.DateTimeField("수정시간", auto_now=True)
 
