@@ -6,6 +6,13 @@ from product.models import ProductImage as ProductImageModel
 from product.models import ProductOption as ProductOptionModel
 
 """"""
+class ProductOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductOptionModel
+        fields = ["product", "name", "price", "quantity", "is_discount", "discount_price", "discount_start_date",
+                  "discount_end_date"]
+
+
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImageModel
