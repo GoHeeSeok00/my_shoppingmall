@@ -10,6 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    category = CategorySerializer(many=True)
     class Meta:
         model = ProductModel
         fields = ["user", "title", "category", "thumbnail", "description", "view_count", "is_active", "is_delete",
