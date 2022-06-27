@@ -69,10 +69,10 @@ class UserDetailApiView(APIView):
         except UserModel.DoesNotExist:
             # some event
             return Response({"error": "존재하지 않는 사용자 입니다."}, status=status.HTTP_404_NOT_FOUND)
-        print(f"user: {user}")
+
         data = OrderedDict()
         data.update(request.data)
-        # print(f"data: {data}")
+
         # str to boolean // data type 변경
         if data["gender"] == "남자":
             data["gender"] = True
@@ -82,14 +82,24 @@ class UserDetailApiView(APIView):
             data["is_receive_marketing_info"] = True
         elif data["is_receive_marketing_info"] == "False":
             data["is_receive_marketing_info"] = False
-        # print(data)
+
         user_serializer = UserDetailSerializer(user, data=data, partial=True)
         user_serializer.is_valid(raise_exception=True)
         user_serializer.save()
         return Response({"message": "프로필 수정 성공!!"}, status=status.HTTP_200_OK)
 
     def delete(self, request, obj_id):
-        return Response()
+        # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
+        try:
+            user = UserModel.objects.get(id=obj_id)
+        except UserModel.DoesNotExist:
+            # some event
+            return Response({"error": "존재하지 않는 사용자 입니다."}, status=status.HTTP_404_NOT_FOUND)
+        user.is_secession = True
+        user.save()
+        # is_secession 필드 변경 후 로그아웃 // 이후부터 로그인 못함
+        logout(request)
+        return Response({"message": "탈퇴 완료"})
 
 # 로그인 view
 class LoginApiView(APIView):
