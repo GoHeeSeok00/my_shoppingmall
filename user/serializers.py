@@ -34,13 +34,13 @@ class UserSerializer(serializers.ModelSerializer):
         # default 값이 있는 필드는 data들어올 때 key, value가 없어도 validate 통과 //
         fields = ["username", "profile_image", "password", "name", "email", "gender", "gender_str", "date_of_birth",
                   "mobile_number", "introduce", "join_date", "is_seller", "is_terms_of_service", "is_privacy_policy",
-                  "is_receive_marketing_info", "is_secession", "useraddress_set"]
+                  "is_receive_marketing_info", "is_approve", "useraddress_set"]
         extra_kwargs = {
             "password": {"write_only": True},
             "gender": {"write_only": True},
             "introduce": {"required": False}
         }
-        read_only_fields = ["join_date", "is_secession"]
+        read_only_fields = ["join_date", "is_approve"]
 
     def validate(self, data):
         print(f"validate: {data}")
@@ -61,7 +61,7 @@ class UserSerializer(serializers.ModelSerializer):
         instance = UserModel(**validated_data)
         if validated_data["is_seller"]:
             # 판매자 계정의 경우 관리자가 승인해줘야되기 때문에 is_active를 False로 바꿔준다.
-            instance.is_active = False
+            instance.is_approve = False
         instance.introduce = F"안녕하세요~ {validated_data['name']}입니다"
         instance.set_password(validated_data["password"])
         instance.save()
@@ -81,7 +81,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = ["username", "profile_image", "password", "name", "email", "gender", "gender_str", "date_of_birth",
                   "mobile_number", "introduce", "join_date", "is_seller", "is_terms_of_service", "is_privacy_policy",
-                  "is_receive_marketing_info", "is_secession", "useraddress_set"]
+                  "is_receive_marketing_info", "is_approve", "useraddress_set"]
         extra_kwargs = {
             "password": {"write_only": True},
             "gender": {"write_only": True},
