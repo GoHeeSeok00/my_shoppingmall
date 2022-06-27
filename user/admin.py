@@ -12,7 +12,7 @@ class CustomUserAdmin(BaseUserAdmin):
     form = CustomUserChangeForm
     add_form = CustomUserCreationForm
 
-    list_display = ("id", "profile_image", "username", "name", "is_seller", "is_active", "last_login")
+    list_display = ("id", "profile_image", "username", "name", "is_seller", "is_active", "is_approve", "last_login")
     list_display_links = ("id", "username")
     # is_seller = T, is_active = F, last_login = nodata 필터  => 관리자 승인을 기다리는 판매자 회원 가입
     list_filter = ("is_seller", "is_active", "last_login")
@@ -21,7 +21,7 @@ class CustomUserAdmin(BaseUserAdmin):
 
     fieldsets = (
         ("info", {"fields": ("username", "password", "profile_image", "email", "name", "gender", "date_of_birth",
-                             "mobile_number", "introduce", "join_date", "is_secession")}),
+                             "mobile_number", "introduce", "join_date", "is_approve")}),
         ("Agreement", {"fields": ("is_terms_of_service", "is_privacy_policy", "is_receive_marketing_info")}),
         ("permissions", {"fields": ("is_admin", "is_seller", "is_active")})
     )

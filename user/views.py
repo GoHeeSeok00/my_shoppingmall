@@ -85,9 +85,9 @@ class UserDetailApiView(APIView):
 
     def delete(self, request, obj_id):
         user = self.get_object(obj_id)
-        user.is_secession = True
+        user.is_active = True
         user.save()
-        # is_secession 필드 변경 후 로그아웃 // 이후부터 로그인 못함
+        # is_active 필드 변경 후 로그아웃 // 이후부터 로그인 못함
         logout(request)
         return Response({"message": "탈퇴 완료"})
 
