@@ -35,22 +35,23 @@ class UserApiView(APIView):
 
 class UserDetailApiView(APIView):
     permission_classes = [IsOwnerOrReadOnly]
-    def get(self, request, obj_id):
+
+    def get_object(self, obj_id):
         # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
         try:
             user = UserModel.objects.get(id=obj_id)
         except UserModel.DoesNotExist:
             # some event
             return Response({"error": "존재하지 않는 사용자 입니다."}, status=status.HTTP_404_NOT_FOUND)
+        self.check_object_permissions(self.request, user)
+        return user
+
+    def get(self, request, obj_id):
+        user = self.get_object(obj_id)
         return Response(UserDetailSerializer(user).data, status=status.HTTP_200_OK)
 
     def put(self, request, obj_id):
-        # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
-        try:
-            user = UserModel.objects.get(id=obj_id)
-        except UserModel.DoesNotExist:
-            # some event
-            return Response({"error": "존재하지 않는 사용자 입니다."}, status=status.HTTP_404_NOT_FOUND)
+        user = self.get_object(obj_id)
 
         data = OrderedDict()
         data.update(request.data)
@@ -71,12 +72,7 @@ class UserDetailApiView(APIView):
         return Response({"message": "프로필 수정 성공!!"}, status=status.HTTP_200_OK)
 
     def delete(self, request, obj_id):
-        # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
-        try:
-            user = UserModel.objects.get(id=obj_id)
-        except UserModel.DoesNotExist:
-            # some event
-            return Response({"error": "존재하지 않는 사용자 입니다."}, status=status.HTTP_404_NOT_FOUND)
+        user = self.get_object(obj_id)
         user.is_secession = True
         user.save()
         # is_secession 필드 변경 후 로그아웃 // 이후부터 로그인 못함
