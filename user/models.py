@@ -58,7 +58,7 @@ class User(AbstractBaseUser):
     is_terms_of_service = models.BooleanField("서비스이용약관동의")
     is_privacy_policy = models.BooleanField("개인정보처리방침동의")
     is_receive_marketing_info = models.BooleanField("마케팅정보수신동의")
-    is_secession = models.BooleanField("탈퇴", default=False)
+    is_approve = models.BooleanField("관리자 승인", default=True)
 
 
     # is_active가 False일 경우 계정이 비활성화됨
