@@ -22,3 +22,13 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.title}"
+
+
+class ProductImage(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    product = models.ForeignKey(to=Product, verbose_name="상품", on_delete=models.CASCADE)
+    image1 = models.ImageField("이미지1", upload_to="product/image/",  max_length=None)
+    image2 = models.ImageField("이미지2", upload_to="product/image/",  max_length=None)
+    image3 = models.ImageField("이미지3", upload_to="product/image/",  max_length=None)
+    image4 = models.ImageField("이미지4", upload_to="product/image/",  max_length=None)
+    image5 = models.ImageField("이미지5", upload_to="product/image/",  max_length=None)
