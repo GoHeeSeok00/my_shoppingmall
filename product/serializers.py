@@ -26,14 +26,20 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(many=True)
-    productimage_set = ProductImageSerializer(many=True)
-    productoption_set = ProductOptionSerializer(many=True, required=False)
+    category = CategorySerializer(many=True, required=False, read_only=True)
+    productimage_set = ProductImageSerializer(many=True, required=False, read_only=True)
+    productoption_set = ProductOptionSerializer(many=True, required=False, read_only=True)
+    get_images = serializers.ListField(required=True)
+    get_options = serializers.ListField(required=True)
 
     class Meta:
         model = ProductModel
         fields = ["user", "title", "category", "thumbnail", "description", "view_count", "is_active", "is_delete",
-                  "created_at", "updated_at", "productimage_set", "productoption_set"]
+                  "created_at", "updated_at", "productimage_set", "productoption_set", "get_images", "get_options"]
         extra_kwargs = {
             "is_delete": {"write_only": True}
         }
+        read_only_fields = ["view_count"]
+
+    def create(self, validated_data):
+        return

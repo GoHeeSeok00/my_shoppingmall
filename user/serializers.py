@@ -14,7 +14,8 @@ class UserAddressSerializer(serializers.ModelSerializer):
     """회원 주소 등록, 조회, 수정"""
     class Meta:
         model = UserAddressModel
-        fields = ["address", "zip_code", "address_tag", "name"]
+        fields = ["user", "address", "zip_code", "address_tag", "name"]
+        read_only_fields = ["user"]
 
     def create(self, validated_data):
         instance = UserAddressModel(**validated_data)
