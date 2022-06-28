@@ -32,6 +32,9 @@ class ProductImage(models.Model):
     product = models.ForeignKey(to=Product, verbose_name="상품", on_delete=models.CASCADE)
     image = models.ImageField("이미지", upload_to="product/image/",  max_length=None, null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.product} 상품의 이미지입니다."
+
 
 class ProductOption(models.Model):
     id = models.BigAutoField(primary_key=True)
