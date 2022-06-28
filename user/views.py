@@ -97,7 +97,7 @@ class UserDetailApiView(APIView):
         user.save()
         # is_active 필드 변경 후 로그아웃 // 이후부터 로그인 못함
         logout(request)
-        return Response({"message": "탈퇴 완료"})
+        return Response({"message": "탈퇴 완료"}, status=status.HTTP_404_NOT_FOUND)
 
 
 # 로그인 api
