@@ -1,3 +1,5 @@
+import json
+
 from rest_framework import serializers
 
 from product.models import Product as ProductModel
@@ -29,17 +31,39 @@ class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=True, required=False, read_only=True)
     productimage_set = ProductImageSerializer(many=True, required=False, read_only=True)
     productoption_set = ProductOptionSerializer(many=True, required=False, read_only=True)
-    get_images = serializers.ListField(required=True)
-    get_options = serializers.ListField(required=True)
+    get_categorys = serializers.ListField()
+    get_images = serializers.ListField()
+    get_options = serializers.ListField()
 
     class Meta:
         model = ProductModel
         fields = ["user", "title", "category", "thumbnail", "description", "view_count", "is_active", "is_delete",
-                  "created_at", "updated_at", "productimage_set", "productoption_set", "get_images", "get_options"]
+                  "created_at", "updated_at", "productimage_set", "productoption_set", "get_categorys", "get_images",
+                  "get_options"]
         extra_kwargs = {
             "is_delete": {"write_only": True}
         }
-        read_only_fields = ["view_count"]
+        read_only_fields = ["user", "view_count"]
 
     def create(self, validated_data):
-        return
+        # 관계형성이 되어있는 정보(카테고리, 이미지, 옵션 정보)는 따로 빼서 저장
+        get_categorys = validated_data.pop("get_categorys", [])
+        images = validated_data.pop("get_images", [])
+        options = validated_data.pop("get_options", [])
+
+        # Product 인스턴스 생성
+        user = self.context["request"].user
+        product = ProductModel(user=user, **validated_data)
+        product.save()
+
+        # ProductImage create
+        for image in images:
+            ProductImageModel.objects.create(product=product, image=image)
+
+        # ProductOption create
+        for option in options:
+            ProductOptionModel.objects.create(product=product, **json.loads(option))
+
+        # category 등록
+        product.category.add(*get_categorys)
+        return product

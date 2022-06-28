@@ -1,3 +1,5 @@
+import json
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,8 +17,8 @@ class ProductApiView(APIView):
         return Response(product_serializer, status=status.HTTP_200_OK)
 
     def post(self, request):
-        print(request.data)
-        product_serializer = ProductSerializer(data=request.data)
+        context = {"request": request}
+        product_serializer = ProductSerializer(data=request.data, context=context)
         product_serializer.is_valid(raise_exception=True)
         product_serializer.save()
         return  Response({"message": "상품 등록 성공!!"}, status=status.HTTP_200_OK)
