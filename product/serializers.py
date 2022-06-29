@@ -31,9 +31,9 @@ class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=True, required=False, read_only=True)
     productimage_set = ProductImageSerializer(many=True, required=False, read_only=True)
     productoption_set = ProductOptionSerializer(many=True, required=False, read_only=True)
-    get_categorys = serializers.ListField()
-    get_images = serializers.ListField()
-    get_options = serializers.ListField()
+    get_categorys = serializers.ListField(required=False)
+    get_images = serializers.ListField(required=False)
+    get_options = serializers.ListField(required=False)
 
     class Meta:
         model = ProductModel
@@ -41,7 +41,10 @@ class ProductSerializer(serializers.ModelSerializer):
                   "created_at", "updated_at", "productimage_set", "productoption_set", "get_categorys", "get_images",
                   "get_options"]
         extra_kwargs = {
-            "is_delete": {"write_only": True}
+            "is_delete": {"write_only": True},
+            "get_categorys": {"write_only": True},
+            "get_images": {"write_only": True},
+            "get_options": {"write_only": True},
         }
         read_only_fields = ["user", "view_count"]
 
