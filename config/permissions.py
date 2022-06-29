@@ -49,6 +49,7 @@ class IsOwner(BasePermission):
     """
     관리자는 모든 접근 가능
     작성자는 모든 접근 가능
+    오브젝트 체크를 하지 않을경우 로그인 사용자만 가능
     """
     def has_object_permission(self, request, view, obj):
         user = request.user
@@ -61,6 +62,13 @@ class IsOwner(BasePermission):
             elif hasattr(obj, "user"):
                 return obj.user.id == user.id
             return False
+        return False
+
+    def has_permission(self, request, view):
+        user = request.user
+
+        if user.is_authenticated:
+            return True
         return False
 
 
