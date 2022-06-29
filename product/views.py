@@ -147,13 +147,13 @@ class ProductOptionDetailApiView(APIView):
     def get(self, request, obj_id):
         product_option = self.get_product_option_object_and_check_permission(obj_id)
         if not product_option:
-            return Response({"error": "삭제할 옵션이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "존재하지 않는 옵션입니다."}, status=status.HTTP_404_NOT_FOUND)
         return Response(ProductOptionSerializer(product_option).data, status=status.HTTP_200_OK)
 
     def put(self, request, obj_id):
         product_option = self.get_product_option_object_and_check_permission(obj_id)
         if not product_option:
-            return Response({"error": "삭제할 옵션이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "존재하지 않는 옵션입니다."}, status=status.HTTP_404_NOT_FOUND)
         
         product_option_serializer = ProductOptionSerializer(product_option, data=request.data, partial=True)
         product_option_serializer.is_valid(raise_exception=True)
