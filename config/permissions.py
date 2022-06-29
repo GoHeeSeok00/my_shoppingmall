@@ -92,6 +92,8 @@ class IsSellerAndOwnerOnlyOrReadOnly(BasePermission):
                 return obj.id == user.id and user.is_seller == True
             elif hasattr(obj, "user"):
                 return obj.user.id == user.id and user.is_seller == True
+            elif hasattr(obj, "product"):
+                return obj.product.user.id == user.id and user.is_seller == True
             return False
         return False
 

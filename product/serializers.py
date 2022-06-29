@@ -19,6 +19,13 @@ class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImageModel
         fields = ["product", "image"]
+        read_only_fields = ["product"]
+
+    def create(self, validated_data):
+        product_image = ProductImageModel(**validated_data)
+        product_image.product = self.context["product"]
+        product_image.save()
+        return product_image
 
 
 class CategorySerializer(serializers.ModelSerializer):
