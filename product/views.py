@@ -31,7 +31,7 @@ class ProductDetailApiView(APIView):
     def get_product_object_and_check_permission(self, obj_id):
         # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
         try:
-            user = ProductModel.objects.get(id=obj_id)
+            user = ProductModel.objects.get(id=obj_id, is_delete=False)
         except ProductModel.DoesNotExist:
             # some event
             return
