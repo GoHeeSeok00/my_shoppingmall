@@ -13,6 +13,14 @@ class ProductOptionSerializer(serializers.ModelSerializer):
         model = ProductOptionModel
         fields = ["product", "name", "price", "quantity", "is_discount", "discount_price", "discount_start_date",
                   "discount_end_date"]
+        read_only_fields = ["product"]
+
+    def create(self, validated_data):
+        instance = ProductOptionModel(**validated_data)
+        instance.product = self.context["product"]
+        instance.save()
+        return instance
+
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -22,10 +30,10 @@ class ProductImageSerializer(serializers.ModelSerializer):
         read_only_fields = ["product"]
 
     def create(self, validated_data):
-        product_image = ProductImageModel(**validated_data)
-        product_image.product = self.context["product"]
-        product_image.save()
-        return product_image
+        instance = ProductImageModel(**validated_data)
+        instance.product = self.context["product"]
+        instance.save()
+        return instance
 
 
 class CategorySerializer(serializers.ModelSerializer):

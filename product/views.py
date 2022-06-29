@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 from config.permissions import IsSellerAndOwnerOnlyOrReadOnly
 from product.models import Product as ProductModel
 from product.models import ProductImage as ProductImageModel
-from product.serializers import ProductSerializer, ProductImageSerializer
+from product.models import ProductOption as ProductOptionModel
+from product.serializers import ProductSerializer, ProductImageSerializer, ProductOptionSerializer
 
 """"""
 # Create your views here.
@@ -32,12 +33,12 @@ class ProductDetailApiView(APIView):
     def get_product_object_and_check_permission(self, obj_id):
         # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
         try:
-            product = ProductModel.objects.get(id=obj_id, is_delete=False)
+            object = ProductModel.objects.get(id=obj_id, is_delete=False)
         except ProductModel.DoesNotExist:
             # some event
             return
-        self.check_object_permissions(self.request, product)
-        return product
+        self.check_object_permissions(self.request, object)
+        return object
 
     def get(self, request, obj_id):
         product = self.get_product_object_and_check_permission(obj_id)
@@ -71,22 +72,22 @@ class ProductImageApiView(APIView):
     def get_product_object_and_check_permission(self, obj_id):
         # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
         try:
-            product = ProductModel.objects.get(id=obj_id, is_delete=False)
+            object = ProductModel.objects.get(id=obj_id, is_delete=False)
         except ProductModel.DoesNotExist:
             # some event
             return
-        self.check_object_permissions(self.request, product)
-        return product
+        self.check_object_permissions(self.request, object)
+        return object
 
     def get_product_image_object_and_check_permission(self, obj_id):
         # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
         try:
-            product_image = ProductImageModel.objects.get(id=obj_id)
+            object = ProductImageModel.objects.get(id=obj_id)
         except ProductImageModel.DoesNotExist:
             # some event
             return
-        self.check_object_permissions(self.request, product_image)
-        return product_image
+        self.check_object_permissions(self.request, object)
+        return object
 
     def post(self, request, obj_id):
         product = self.get_product_object_and_check_permission(obj_id)
@@ -105,3 +106,63 @@ class ProductImageApiView(APIView):
         product_image.delete()
         return Response({"message": "이미지 삭제 성공!!"}, status=status.HTTP_200_OK)
 
+
+class ProductOptionApiView(APIView):
+    permission_classes = [IsSellerAndOwnerOnlyOrReadOnly]
+
+    def get_product_object_and_check_permission(self, obj_id):
+        # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
+        try:
+            object = ProductModel.objects.get(id=obj_id, is_delete=False)
+        except ProductModel.DoesNotExist:
+            # some event
+            return
+        self.check_object_permissions(self.request, object)
+        return object
+
+    def post(self, request, obj_id):
+        product = self.get_product_object_and_check_permission(obj_id)
+        if not product:
+            return Response({"error": "존재하지 않는 옵션입니다."}, status=status.HTTP_404_NOT_FOUND)
+
+        product_option_serializer = (ProductOptionSerializer(data=request.data, context={"product": product}))
+        product_option_serializer.is_valid(raise_exception=True)
+        product_option_serializer.save()
+        return Response({"message": "옵션 등록 성공!!"}, status=status.HTTP_200_OK)
+
+
+class ProductOptionDetailApiView(APIView):
+    permission_classes = [IsSellerAndOwnerOnlyOrReadOnly]
+
+    def get_product_option_object_and_check_permission(self, obj_id):
+        # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
+        try:
+            object = ProductOptionModel.objects.get(id=obj_id)
+        except ProductOptionModel.DoesNotExist:
+            # some event
+            return
+        self.check_object_permissions(self.request, object)
+        return object
+
+    def get(self, request, obj_id):
+        product_option = self.get_product_option_object_and_check_permission(obj_id)
+        if not product_option:
+            return Response({"error": "삭제할 옵션이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(ProductOptionSerializer(product_option).data, status=status.HTTP_200_OK)
+
+    def put(self, request, obj_id):
+        product_option = self.get_product_option_object_and_check_permission(obj_id)
+        if not product_option:
+            return Response({"error": "삭제할 옵션이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+        
+        product_option_serializer = ProductOptionSerializer(product_option, data=request.data, partial=True)
+        product_option_serializer.is_valid(raise_exception=True)
+        product_option_serializer.save()        
+        return Response({"message": "상품 옵션 수정 성공!!"}, status=status.HTTP_200_OK)
+
+    def delete(self, request, obj_id):
+        product_option = self.get_product_option_object_and_check_permission(obj_id)
+        if not product_option:
+            return Response({"error": "삭제할 옵션이 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+        product_option.delete()
+        return Response({"message": "옵션 삭제 성공!!"}, status=status.HTTP_200_OK)
