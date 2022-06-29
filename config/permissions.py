@@ -62,3 +62,40 @@ class IsOwner(BasePermission):
                 return obj.user.id == user.id
             return False
         return False
+
+
+class IsSellerAndOwnerOnlyOrReadOnly(BasePermission):
+    """
+    GET method이면 Read만 가능(모든 사용자)
+    관리자는 모든 접근 가능
+    판매자이면서 작성자는 모든 접근 가능
+    """
+    SAFE_METHODS = ("GET",)
+
+    def has_object_permission(self, request, view, obj):
+        user = request.user
+
+        if request.method in self.SAFE_METHODS:
+            return True
+        elif user.is_authenticated:
+            if user.is_admin:
+                return True
+            elif obj.__class__ == get_user_model():
+                return obj.id == user.id and user.is_seller == True
+            elif hasattr(obj, "user"):
+                return obj.user.id == user.id and user.is_seller == True
+            return False
+        return False
+
+    def has_permission(self, request, view):
+        user = request.user
+
+        if request.method in self.SAFE_METHODS:
+            return True
+        elif user.is_authenticated:
+            if user.is_admin:
+                return True
+            elif user.is_seller:
+                return True
+            return False
+        return False

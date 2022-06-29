@@ -4,14 +4,14 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from config.permissions import IsOwnerOrReadOnly
+from config.permissions import IsOwnerOrReadOnly, IsSellerAndOwnerOnlyOrReadOnly
 from product.models import Product as ProductModel
 from product.serializers import ProductSerializer
 
 """"""
 # Create your views here.
 class ProductApiView(APIView):
-    # permission_classes = []
+    permission_classes = [IsSellerAndOwnerOnlyOrReadOnly]
 
     def get(self, request):
         product_serializer = ProductSerializer(ProductModel.objects.filter(is_delete=False), many=True).data
@@ -26,7 +26,7 @@ class ProductApiView(APIView):
 
 
 class ProductDetailApiView(APIView):
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsSellerAndOwnerOnlyOrReadOnly]
 
     def get_product_object_and_check_permission(self, obj_id):
         # objects.get에서 객체가 존재하지 않을 경우 DoesNotExist Exception 발생
