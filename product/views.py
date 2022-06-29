@@ -14,7 +14,7 @@ class ProductApiView(APIView):
     # permission_classes = []
 
     def get(self, request):
-        product_serializer = ProductSerializer(ProductModel.objects.all(), many=True).data
+        product_serializer = ProductSerializer(ProductModel.objects.filter(is_delete=False), many=True).data
         return Response(product_serializer, status=status.HTTP_200_OK)
 
     def post(self, request):
