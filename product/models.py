@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from user.models import User as UserModel
@@ -55,7 +55,7 @@ class ProductReview(models.Model):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(to=UserModel, verbose_name="회원", on_delete=models.CASCADE)
     product = models.ForeignKey(to=Product, verbose_name="상품", on_delete=models.CASCADE)
-    rating = models.IntegerField("평점")
+    rating = models.IntegerField("평점", validators=[MinValueValidator(1), MaxValueValidator(10)])
     content = models.TextField("내용")
     image = models.ImageField("이미지", null=True, blank=True)
     created_at = models.DateTimeField("작성시간", auto_now_add=True)
