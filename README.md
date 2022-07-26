@@ -1,7 +1,7 @@
 # my_shoppingmall
 
 ## 😎 프로젝트 소개
-my_shoppingmaill 프로젝트는 DRF를 이용해서 쇼핑몰을 만드는 프로젝트입니다. 
+my_shoppingmaill 프로젝트는 DRF를 사용해 쇼핑몰을 만드는 프로젝트입니다. 
 
 DRF를 공부하고 만든 첫 프로젝트이며 혼자서 모든것을 담당하는 개인 프로젝트입니다. 
 
